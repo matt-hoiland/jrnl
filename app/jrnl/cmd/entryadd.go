@@ -45,7 +45,6 @@ func init() {
 }
 
 func runEntryAddCmd(cmd *cobra.Command, args []string) {
-	fmt.Printf("TODO: implement entry add, args: %v, tags: %v\n", args, tags)
 	entry := &data.Entry{
 		Metadata: data.Metadata{
 			Title: args[0],
@@ -57,9 +56,15 @@ func runEntryAddCmd(cmd *cobra.Command, args []string) {
 	fp, err := os.Create(entry.Filename)
 	if err != nil {
 		logrus.Error(err)
+		return
 	}
-	data.WriteEntry(fp, entry)
+	err = data.WriteEntry(fp, entry)
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
 	fp.Close()
+	fmt.Printf("%s created\n", entry.Filename)
 }
 
 func sanitizeTitle(title string) string {
