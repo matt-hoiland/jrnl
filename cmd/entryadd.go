@@ -39,5 +39,5 @@ func init() {
 }
 
 func runEntryAddCmd(cmd *cobra.Command, args []string) {
-	fmt.Printf("TODO: implement entry ls, args: %v, tags: %v\n", args, tags)
+	fmt.Printf("TODO: implement entry add, args: %v, tags: %v\n", args, tags)
 }

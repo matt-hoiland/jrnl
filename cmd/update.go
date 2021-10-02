@@ -37,5 +37,5 @@ func init() {
 }
 
 func runUpdateCmd(cmd *cobra.Command, args []string) {
-	fmt.Printf("TODO: implement init, args: %v\n", args)
+	fmt.Printf("TODO: implement update, args: %v\n", args)
 }
