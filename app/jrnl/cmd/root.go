@@ -33,7 +33,7 @@ var rootCmd = &cobra.Command{
 	Use:     "jrnl",
 	Short:   "A simple CLI for manipulating journal files",
 	Long:    ``,
-	Version: "v0.0.0",
+	Version: "v0.0.1",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
