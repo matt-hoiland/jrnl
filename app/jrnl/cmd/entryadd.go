@@ -18,7 +18,13 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"strings"
+	"time"
 
+	"github.com/kennygrant/sanitize"
+	"github.com/matt-hoiland/jrnl/data"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -40,4 +46,24 @@ func init() {
 
 func runEntryAddCmd(cmd *cobra.Command, args []string) {
 	fmt.Printf("TODO: implement entry add, args: %v, tags: %v\n", args, tags)
+	entry := &data.Entry{
+		Metadata: data.Metadata{
+			Title: args[0],
+			Date:  time.Now().Format(data.TimeLayout),
+		},
+	}
+	entry.Filename = fmt.Sprintf("%s_%s_%s.md", strings.Split(entry.Date, "T")[0], entry.GetWeekDay(), sanitizeTitle(entry.Title))
+
+	fp, err := os.Create(entry.Filename)
+	if err != nil {
+		logrus.Error(err)
+	}
+	data.WriteEntry(fp, entry)
+	fp.Close()
+}
+
+func sanitizeTitle(title string) string {
+	title = strings.ToLower(title)
+	title = sanitize.BaseName(title)
+	return title
 }
