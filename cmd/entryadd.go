@@ -35,20 +35,27 @@ var entryAddCmd = &cobra.Command{
 	Long: `Entry add (jrnl entry add) creates a new journal entry preconfigured with the
 optional tag set, timestamped for the moment of its creation, and titled with
 the provide 'title'. The produced file will have time stamped, abbreviated,
-sanitized short name derived from the title.`,
+sanitized short name derived from the title.
+
+If successful, the filename is printed to stdout to be consumed in scripts.`,
 	Args: cobra.ExactArgs(1),
-	Run:  runEntryAddCmd,
+	RunE: runEntryAddCmd,
 }
 
 func init() {
 	entryCmd.AddCommand(entryAddCmd)
 }
 
-func runEntryAddCmd(cmd *cobra.Command, args []string) {
+func runEntryAddCmd(cmd *cobra.Command, args []string) error {
+	// Ignoring error
+	// TODO: add logging support to file
+	host, _ := os.Hostname()
+
 	entry := &data.Entry{
 		Metadata: data.Metadata{
 			Title: args[0],
 			Date:  time.Now().Format(data.TimeLayout),
+			Host:  host,
 		},
 	}
 	entry.Filename = fmt.Sprintf("%s_%s_%s.md", strings.Split(entry.Date, "T")[0], entry.GetWeekDay(), sanitizeTitle(entry.Title))
@@ -56,15 +63,16 @@ func runEntryAddCmd(cmd *cobra.Command, args []string) {
 	fp, err := os.Create(entry.Filename)
 	if err != nil {
 		logrus.Error(err)
-		return
+		return err
 	}
 	err = data.WriteEntry(fp, entry)
 	if err != nil {
 		logrus.Error(err)
-		return
+		return err
 	}
 	fp.Close()
-	fmt.Printf("%s created\n", entry.Filename)
+	fmt.Println(entry.Filename)
+	return nil
 }
 
 func sanitizeTitle(title string) string {
