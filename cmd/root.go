@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/spf13/cobra"
-
+	"github.com/matt-hoiland/jrnl/app"
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
@@ -33,7 +33,7 @@ var rootCmd = &cobra.Command{
 	Use:     "jrnl",
 	Short:   "A simple CLI for manipulating journal files",
 	Long:    ``,
-	Version: "v0.0.1",
+	Version: app.Version,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
