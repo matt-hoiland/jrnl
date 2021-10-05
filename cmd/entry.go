@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// tags is a package level environment variable which stores the values passed with the repeateable '-t' flag
 var tags []string
 
 // entryCmd represents the entry command

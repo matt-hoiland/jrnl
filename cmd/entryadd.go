@@ -56,6 +56,7 @@ func runEntryAddCmd(cmd *cobra.Command, args []string) error {
 			Title: args[0],
 			Date:  time.Now().Format(data.TimeLayout),
 			Host:  host,
+			Tags:  hashTags(),
 		},
 	}
 	entry.Filename = fmt.Sprintf("%s_%s_%s.md", strings.Split(entry.Date, "T")[0], entry.GetWeekDay(), sanitizeTitle(entry.Title))
@@ -73,6 +74,20 @@ func runEntryAddCmd(cmd *cobra.Command, args []string) error {
 	fp.Close()
 	fmt.Println(entry.Filename)
 	return nil
+}
+
+// Utility Functions ---------------------------------------------------------
+
+func hashTags() []string {
+	hashtags := []string{}
+	for _, tag := range tags {
+		hashtag := tag
+		if tag[0] != '#' {
+			hashtag = "#" + tag
+		}
+		hashtags = append(hashtags, hashtag)
+	}
+	return hashtags
 }
 
 func sanitizeTitle(title string) string {
